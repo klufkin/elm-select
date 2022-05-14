@@ -1,6 +1,6 @@
 module Main exposing (main)
 
-import Chapters.Testing
+import Chapters.Single
 import ElmBook exposing (withChapters)
 import ElmBook.ElmCSS exposing (Book, book)
 
@@ -9,5 +9,5 @@ main : Book ()
 main =
     book "elm-select"
         |> withChapters
-            [ Chapters.Testing.chapter_
+            [ Chapters.Single.chapter_
             ]

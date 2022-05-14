@@ -6,3 +6,6 @@ node_modules
 
 # Makefile pseudo target
 /*.INSTALLED
+
+# Story book
+elm-book/index.html

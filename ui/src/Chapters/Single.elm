@@ -1,12 +1,18 @@
-module Chapters.Single exposing (Model, chapter_)
+module Chapters.Single exposing (Model, chapter_, init)
 
-import Browser
 import Css
-import ElmBook.Chapter exposing (chapter, renderComponent)
+import ElmBook.Actions exposing (mapUpdateWithCmd)
+import ElmBook.Chapter exposing (chapter, renderStatefulComponent)
 import ElmBook.ElmCSS exposing (Chapter)
-import Html.Styled as Styled exposing (Html, div, p, text)
+import Html.Styled as Styled exposing (Html, div)
 import Html.Styled.Attributes as StyledAttribs
-import Select exposing (MenuItem, initState, selectIdentifier, update)
+import Select exposing (MenuItem, initState, selectIdentifier)
+
+
+type alias SharedState x =
+    { x
+        | singleModel : Model
+    }
 
 
 type Msg
@@ -20,29 +26,17 @@ type alias Model =
     }
 
 
-init : ( Model, Cmd Msg )
+init : Model
 init =
-    ( { selectState = initState
-      , items =
-            [ Select.basicMenuItem { item = "Elm", label = "Elm" }
-            , Select.basicMenuItem { item = "Is", label = "Is" }
-            , Select.basicMenuItem { item = "Really", label = "Really" }
-            , Select.basicMenuItem { item = "Great", label = "Great" }
-            ]
-      , selectedItem = Nothing
-      }
-    , Cmd.none
-    )
-
-
-main : Program () Model Msg
-main =
-    Browser.element
-        { init = always init
-        , view = view >> Styled.toUnstyled
-        , update = update
-        , subscriptions = \_ -> Sub.none
-        }
+    { selectState = initState
+    , items =
+        [ Select.basicMenuItem { item = "Elm", label = "Elm" }
+        , Select.basicMenuItem { item = "Is", label = "Is" }
+        , Select.basicMenuItem { item = "Really", label = "Really" }
+        , Select.basicMenuItem { item = "Great", label = "Great" }
+        ]
+    , selectedItem = Nothing
+    }
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -95,12 +89,17 @@ view m =
         ]
 
 
-chapter_ : Chapter x
+chapter_ : Chapter (SharedState x)
 chapter_ =
     chapter "Single"
-        |> renderComponent
-            (div []
-                [ p [] [ text "Cooper" ]
-                , p [] [ text "- Every day, once a day, give yourself a present." ]
-                ]
+        |> renderStatefulComponent
+            (\{ singleModel } ->
+                view singleModel
+                    |> Styled.map
+                        (mapUpdateWithCmd
+                            { fromState = .singleModel
+                            , toState = \state singleModel_ -> { state | singleModel = singleModel_ }
+                            , update = update
+                            }
+                        )
             )

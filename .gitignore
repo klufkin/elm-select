@@ -8,4 +8,4 @@ node_modules
 /*.INSTALLED
 
 # Story book
-elm-book/index.html
+ui/index.html

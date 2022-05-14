@@ -1,6 +1,6 @@
 Y=yarn -s --prefer-offline
 
-include elm-book/elm-book.mk
+include ui/elm-book.mk
 
 .PHONY: install
 install: .yarn.INSTALLED .yarn.examples-optimized.INSTALLED

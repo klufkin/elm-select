@@ -1,13 +1,28 @@
 module Main exposing (main)
 
-import Chapters.Single
-import ElmBook exposing (withChapters)
+import Chapters.Multi as Multi
+import Chapters.Single as Single
+import ElmBook exposing (withChapters, withStatefulOptions)
 import ElmBook.ElmCSS exposing (Book, book)
+import ElmBook.StatefulOptions
 
 
-main : Book ()
+type alias SharedState =
+    { singleModel : Single.Model
+    , multiModel : Multi.Model
+    }
+
+
+initialState : SharedState
+initialState =
+    { singleModel = Single.init, multiModel = Multi.init }
+
+
+main : Book SharedState
 main =
     book "elm-select"
+        |> withStatefulOptions [ ElmBook.StatefulOptions.initialState initialState ]
         |> withChapters
-            [ Chapters.Single.chapter_
+            [ Single.chapter_
+            , Multi.chapter_
             ]

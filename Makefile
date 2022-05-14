@@ -1,22 +1,24 @@
 Y=yarn -s --prefer-offline
 
+include elm-book/elm-book.mk
+
 .PHONY: install
 install: .yarn.INSTALLED .yarn.examples-optimized.INSTALLED
 .yarn.INSTALLED: package.json yarn.lock
-	yarn install
+	${Y} install
 	@touch $@
 
 .yarn.examples-optimized.INSTALLED: ./examples-optimized/package.json ./examples-optimized/yarn.lock
-	yarn --cwd examples-optimized install
+	${Y} --cwd examples-optimized install
 	@touch $@
 
 .PHONY: elm-examples
 elm-examples: install
-	cd examples && elm reactor & yarn --cwd examples-optimized start
+	cd examples && elm reactor & ${Y} --cwd examples-optimized start
 
 .PHONY: elm-tests
 elm-tests:
-	yarn elm-test
+	${Y} elm-test
 
 .PHONY: ts-tests
 ts-tests: install
@@ -24,12 +26,12 @@ ts-tests: install
 
 .PHONY: ci-e2e-test
 ci-e2e-test: 
-	yarn start-server-and-test  'make elm-examples' '8000|1234' 'make ts-tests'
+	${Y} start-server-and-test  'make elm-examples' '8000|1234' 'make ts-tests'
 
 .PHONY: elm-live
 elm-live: install
-	yarn elm-live --no-server
+	${Y} elm-live --no-server
 
 .PHONY: elm-analyse
 elm-analyse: install
-	yarn elm-analyse
+	${Y} elm-analyse

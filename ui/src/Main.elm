@@ -2,6 +2,7 @@ module Main exposing (main)
 
 import Chapters.Multi as Multi
 import Chapters.Single as Single
+import Chapters.SingleNative as SingleNative
 import ElmBook exposing (withChapters, withStatefulOptions)
 import ElmBook.ElmCSS exposing (Book, book)
 import ElmBook.StatefulOptions
@@ -24,5 +25,6 @@ main =
         |> withStatefulOptions [ ElmBook.StatefulOptions.initialState initialState ]
         |> withChapters
             [ Single.chapter_
+            , SingleNative.chapter_
             , Multi.chapter_
             ]

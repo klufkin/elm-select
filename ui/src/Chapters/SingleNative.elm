@@ -2,7 +2,7 @@ module Chapters.SingleNative exposing (Model, chapter_, init)
 
 import Css
 import ElmBook.Actions exposing (mapUpdateWithCmd)
-import ElmBook.Chapter exposing (chapter, renderStatefulComponent)
+import ElmBook.Chapter exposing (chapter, renderWithComponentList, withStatefulComponentList)
 import ElmBook.ElmCSS exposing (Chapter)
 import Html.Styled as Styled exposing (Html, div)
 import Html.Styled.Attributes as StyledAttribs

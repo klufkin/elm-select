@@ -2,7 +2,7 @@ module Chapters.Multi exposing (Model, chapter_, init)
 
 import Css
 import ElmBook.Actions exposing (mapUpdateWithCmd)
-import ElmBook.Chapter exposing (chapter, renderStatefulComponent)
+import ElmBook.Chapter exposing (chapter, renderWithComponentList, withStatefulComponentList)
 import ElmBook.ElmCSS exposing (Chapter)
 import Html.Styled as Styled exposing (Html, div)
 import Html.Styled.Attributes as StyledAttribs
@@ -67,8 +67,7 @@ view m =
     in
     div
         [ StyledAttribs.css
-            [ Css.marginTop (Css.px 20)
-            , Css.width (Css.pct 50)
+            [ Css.width (Css.pct 50)
             , Css.marginLeft Css.auto
             , Css.marginRight Css.auto
             ]
@@ -87,14 +86,19 @@ view m =
 chapter_ : Chapter (SharedState x)
 chapter_ =
     chapter "Multi"
-        |> renderStatefulComponent
-            (\{ multiModel } ->
-                view multiModel
-                    |> Styled.map
-                        (mapUpdateWithCmd
-                            { fromState = .multiModel
-                            , toState = \state multiModel_ -> { state | multiModel = multiModel_ }
-                            , update = update
-                            }
-                        )
-            )
+        |> withStatefulComponentList
+            [ ( ""
+              , \{ multiModel } ->
+                    view multiModel
+                        |> Styled.map
+                            (mapUpdateWithCmd
+                                { fromState = .multiModel
+                                , toState = \state multiModel_ -> { state | multiModel = multiModel_ }
+                                , update = update
+                                }
+                            )
+              )
+            ]
+        |> renderWithComponentList """
+Select multiple items from the menu.
+"""

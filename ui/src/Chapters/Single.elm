@@ -2,7 +2,7 @@ module Chapters.Single exposing (Model, chapter_, init)
 
 import Css
 import ElmBook.Actions exposing (mapUpdateWithCmd)
-import ElmBook.Chapter exposing (chapter, renderStatefulComponent)
+import ElmBook.Chapter exposing (chapter, renderStatefulComponent, renderStatefulComponentList, renderWithComponentList, withStatefulComponentList)
 import ElmBook.ElmCSS exposing (Chapter)
 import Html.Styled as Styled exposing (Html, div)
 import Html.Styled.Attributes as StyledAttribs
@@ -71,8 +71,7 @@ view m =
     in
     div
         [ StyledAttribs.css
-            [ Css.marginTop (Css.px 20)
-            , Css.width (Css.pct 50)
+            [ Css.width (Css.pct 50)
             , Css.marginLeft Css.auto
             , Css.marginRight Css.auto
             ]
@@ -92,14 +91,19 @@ view m =
 chapter_ : Chapter (SharedState x)
 chapter_ =
     chapter "Single"
-        |> renderStatefulComponent
-            (\{ singleModel } ->
-                view singleModel
-                    |> Styled.map
-                        (mapUpdateWithCmd
-                            { fromState = .singleModel
-                            , toState = \state singleModel_ -> { state | singleModel = singleModel_ }
-                            , update = update
-                            }
-                        )
-            )
+        |> withStatefulComponentList
+            [ ( ""
+              , \{ singleModel } ->
+                    view singleModel
+                        |> Styled.map
+                            (mapUpdateWithCmd
+                                { fromState = .singleModel
+                                , toState = \state singleModel_ -> { state | singleModel = singleModel_ }
+                                , update = update
+                                }
+                            )
+              )
+            ]
+        |> renderWithComponentList """
+Used for selecting single items in the menu.
+"""

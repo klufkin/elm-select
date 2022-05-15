@@ -71,8 +71,7 @@ view m =
     in
     div
         [ StyledAttribs.css
-            [ Css.marginTop (Css.px 20)
-            , Css.width (Css.pct 50)
+            [ Css.width (Css.pct 50)
             , Css.marginLeft Css.auto
             , Css.marginRight Css.auto
             ]
@@ -90,15 +89,23 @@ view m =
 
 chapter_ : Chapter (SharedState x)
 chapter_ =
-    chapter "Single Native"
-        |> renderStatefulComponent
-            (\{ singleModel } ->
-                view singleModel
-                    |> Styled.map
-                        (mapUpdateWithCmd
-                            { fromState = .singleModel
-                            , toState = \state singleModel_ -> { state | singleModel = singleModel_ }
-                            , update = update
-                            }
-                        )
-            )
+    chapter "Single native"
+        |> withStatefulComponentList
+            [ ( ""
+              , \{ singleModel } ->
+                    view singleModel
+                        |> Styled.map
+                            (mapUpdateWithCmd
+                                { fromState = .singleModel
+                                , toState = \state singleModel_ -> { state | singleModel = singleModel_ }
+                                , update = update
+                                }
+                            )
+              )
+            ]
+        |> renderWithComponentList """
+A native html select component styled to closely match the `Single` variant.
+
+Native elements have their own behaviour on touch devices that might provide a
+better user experience.
+"""
